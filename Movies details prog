@@ -1,0 +1,39 @@
+from imdb import IMDb
+
+# Create an instance of the IMDb class
+ia = IMDb()
+
+# Function to get movie metadata
+def get_movie_metadata(movie_title):
+    # Search for the movie by title
+    search_results = ia.search_movie(movie_title)
+
+    if not search_results:
+        print(f"No results found for '{movie_title}'")
+        return
+    
+    # Extract metadata for each movie found
+    for movie in search_results:
+        ia.update(movie)
+        metadata = {
+            'title': movie.get('title'),
+            'year': movie.get('year'),
+            'genres': movie.get('genres'),
+            'directors': [director['name'] for director in movie.get('directors', [])],
+            'cast': [cast['name'] for cast in movie.get('cast', [])],
+            'plot': movie.get('plot outline'),
+            'rating': movie.get('rating'),
+            'votes': movie.get('votes'),
+            'language': movie.get('languages'),
+            'country': movie.get('countries'),
+        }
+
+        print("\nMovie Metadata:\n")
+        for key, value in metadata.items():
+            print(f"{key.capitalize()}: {value}")
+        print("\n" + "="*40 + "\n")
+
+# Main program
+if __name__ == "__main__":
+    movie_title = input("Enter the movie title: ")
+    get_movie_metadata(movie_title)
